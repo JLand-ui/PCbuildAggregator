@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+from datetime import datetime
 
 # 1. Set this to your Triform HTTP endpoint after deploying
 API_URL = "https://YOUR-TRIFORM-INSTANCE/api/execute/Build%20Price%20Aggregator/flow"
@@ -24,20 +25,35 @@ user_inputs = {}
 for label, field in part_fields:
     user_inputs[field] = st.text_input(f"{label} Prisjakt URL", key=field)
 
+# Persistent log (session state)
+if "logs" not in st.session_state:
+    st.session_state.logs = []
+
+def log(msg):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    st.session_state.logs.append(f"[{timestamp}] {msg}")
+
 if st.button("Calculate Build Price"):
     # Filter out empty links
     payload = {k: v for k, v in user_inputs.items() if v.strip()}
+    log(f"Form submitted. Payload: {payload}")
 
     if not payload:
-        st.warning("Please enter at least one Prisjakt link.")
+        msg = "Please enter at least one Prisjakt link."
+        st.warning(msg)
+        log(f"Warning: {msg}")
     else:
         with st.spinner("Fetching prices..."):
             try:
                 resp = requests.post(API_URL, json=payload, timeout=60)
+                log(f"Sent POST to API: {API_URL}")
                 resp.raise_for_status()
                 data = resp.json()
+                log(f"Received response: {data}")
+
                 if "error" in data:
                     st.error(f"Error: {data['error']}")
+                    log(f"API Error: {data['error']}")
                 else:
                     # Display results
                     results = data.get("results", [])
@@ -56,8 +72,24 @@ if st.button("Calculate Build Price"):
                     st.write(f"**Current:** {data.get('total_current', '-')}")
                     st.write(f"**6 months ago:** {data.get('total_6mo_ago', '-')}")
                     st.write(f"**1 year ago:** {data.get('total_1yr_ago', '-')}")
+                    log("Query successful.")
             except Exception as e:
                 st.error(f"Failed to get prices: {e}")
+                log(f"Exception: {e}")
+
+# Log window (shows after form)
+with st.expander("Logs", expanded=False):
+    col1, col2 = st.columns([0.8, 0.2])
+    with col2:
+        if st.button("Clear logs", key="clear_logs"):
+            st.session_state.logs = []
+            st.experimental_rerun()
+    with col1:
+        if st.session_state.logs:
+            for i, logmsg in enumerate(st.session_state.logs):
+                st.write(f"{i+1}. {logmsg}")
+        else:
+            st.write("No logs yet.")
 
 st.markdown("""
 ---
