@@ -6,7 +6,7 @@ from datetime import datetime
 API_URL = "https://nexus.triform.ai/api/in/5088e1d4-45c2-403c-859d-377f77dcb76f/9412e01c-8566-4150-a7d6-1455497d7788"
 
 # 2. Paste your Triform ingress token here
-TRIFORM_TOKEN = "be58aeecca41477157f1f22cf283bffa33c15483"
+Authorization: "Bearer be58aeecca41477157f1f22cf283bffa33c15483"
 
 st.title("PC Build Price Aggregator 💻💸")
 
