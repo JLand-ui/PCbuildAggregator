@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 
 # 1. Set this to your Triform HTTP endpoint after deploying
-API_URL = "https://app.triform.ai/api/execute/Build%20Price%20Aggregator/flow"
+API_URL = "https://app.triform.ai/project/5088e1d4-45c2-403c-859d-377f77dcb76f"
 
 # 2. Paste your Triform ingress token here
 TRIFORM_TOKEN = "be58aeecca41477157f1f22cf283bffa33c15483"
