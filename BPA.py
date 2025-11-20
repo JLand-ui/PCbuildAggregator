@@ -2,11 +2,11 @@ import streamlit as st
 import requests
 from datetime import datetime
 
-# 1. Set this to your Triform HTTP endpoint after deploying
+# 1. Set your Triform HTTP endpoint (from ENDPOINT PATH in Triform)
 API_URL = "https://nexus.triform.ai/api/in/5088e1d4-45c2-403c-859d-377f77dcb76f/9412e01c-8566-4150-a7d6-1455497d7788"
 
-# 2. Paste your Triform ingress token here
-Authorization: "Bearer be58aeecca41477157f1f22cf283bffa33c15483"
+# 2. Paste your ingress token here (from Triform Endpoints panel)
+INGRESS_TOKEN = "be58aeecca41477157f1f22cf283bffa33c15483"
 
 st.title("PC Build Price Aggregator 💻💸")
 
@@ -16,12 +16,12 @@ Leave blank if you don't have a component.
 """)
 
 part_fields = [
-    ("CPU", "cpu_url"),
-    ("GPU", "gpu_url"),
-    ("RAM", "ram_url"),
-    ("Motherboard", "motherboard_url"),
-    ("PSU", "psu_url"),
-    ("Hard Drive", "hard_drive_url"),
+    ("CPU", "cpu_link"),
+    ("GPU", "gpu_link"),
+    ("RAM", "ram_link"),
+    ("Motherboard", "motherboard_link"),
+    ("PSU", "psu_link"),
+    ("Hard Drive", "harddrive_link"),
 ]
 
 user_inputs = {}
@@ -49,7 +49,7 @@ if st.button("Calculate Build Price"):
         with st.spinner("Fetching prices..."):
             try:
                 headers = {
-                    "x-triform-ingress-token": TRIFORM_TOKEN
+                    "Authorization": f"Bearer {INGRESS_TOKEN}"
                 }
                 resp = requests.post(API_URL, json=payload, headers=headers, timeout=60)
                 log(f"Sent POST to API: {API_URL}")
