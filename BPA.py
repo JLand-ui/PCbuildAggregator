@@ -5,6 +5,9 @@ from datetime import datetime
 # 1. Set this to your Triform HTTP endpoint after deploying
 API_URL = "https://app.triform.ai/api/projects/5088e1d4-45c2-403c-859d-377f77dcb76f/mcp"
 
+# 2. Paste your Triform ingress token here
+TRIFORM_TOKEN = "5e77f4795d2ec16e24414d78f312fc5e5ca02554"
+
 st.title("PC Build Price Aggregator 💻💸")
 
 st.markdown("""
@@ -45,7 +48,10 @@ if st.button("Calculate Build Price"):
     else:
         with st.spinner("Fetching prices..."):
             try:
-                resp = requests.post(API_URL, json=payload, timeout=60)
+                headers = {
+                    "x-triform-ingress-token": TRIFORM_TOKEN
+                }
+                resp = requests.post(API_URL, json=payload, headers=headers, timeout=60)
                 log(f"Sent POST to API: {API_URL}")
                 resp.raise_for_status()
                 data = resp.json()
