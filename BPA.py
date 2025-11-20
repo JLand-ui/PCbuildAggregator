@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 
 # 1. Set this to your Triform HTTP endpoint after deploying
-API_URL = "https://app.triform.ai/api/projects/5088e1d4-45c2-403c-859d-377f77dcb76f/mcp"
+API_URL = "https://nexus.triform.ai/api/in/5088e1d4-45c2-403c-859d-377f77dcb76f/9412e01c-8566-4150-a7d6-1455497d7788"
 
 # 2. Paste your Triform ingress token here
 TRIFORM_TOKEN = "5e77f4795d2ec16e24414d78f312fc5e5ca02554"
